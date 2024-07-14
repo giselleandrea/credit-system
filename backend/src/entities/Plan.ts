@@ -1,6 +1,6 @@
-import { ObjectId } from 'mongodb';
 import { 
     Entity, 
+    ObjectId,
     ObjectIdColumn, 
     Column
 } from "typeorm";
@@ -8,16 +8,20 @@ import {
 @Entity()
 export class Plan {
     @ObjectIdColumn()
-    id: number;
+    _id: ObjectId;
 
     @Column()
     creditId: number;
 
     @Column()
-    paymentSchedule: Array<{
-        month: number;
-        principal: number;
-        interest: number;
-        remainingBalance: number;
-    }>;
+    month: number;
+
+    @Column('decimal')
+    principal: number;
+
+    @Column('decimal')
+    interest: number;
+
+    @Column('decimal')
+    remainingBalance: number;
 }

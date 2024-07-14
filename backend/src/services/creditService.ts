@@ -27,17 +27,17 @@ export async function evaluateCreditStatus ({
 export async function saveAmortizationPlan(credit: Credit) {
     const amortizationPlan = calculateAmortizationPlan(credit);
 
-    const paymentSchedule = amortizationPlan.map(plan => ({
-        month: plan.month,
-        principal: plan.principal,
-        interest: plan.interest,
-        remainingBalance: plan.remainingBalance,
-    }));
+    const plans = amortizationPlan.map(plan => {
+        const newPlan = new Plan();
+        newPlan.creditId = credit.id;
+        newPlan.month = plan.month;
+        newPlan.principal = plan.principal;
+        newPlan.interest = plan.interest;
+        newPlan.remainingBalance = plan.remainingBalance;
+        return newPlan;
+    });
 
-    const newPlan = new Plan();
-    newPlan.creditId = credit.id;
-    newPlan.paymentSchedule = paymentSchedule;
-    await mongoDataSource.getMongoRepository(Plan).save(newPlan);
+    await mongoDataSource.getMongoRepository(Plan).save(plans);
 };
 
 function calculateAmortizationPlan(credit: Credit) {
@@ -59,4 +59,4 @@ function calculateAmortizationPlan(credit: Credit) {
         });
     }
     return amortizationPlan;
-};
+}
