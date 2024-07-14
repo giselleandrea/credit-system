@@ -40,7 +40,10 @@ const createUser = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
     try {
-        const { email, password } = req.body;
+        const { 
+            email, 
+            password 
+        } = req.body;
 
         const user = await User.findOne({ 
             where: { email: email } 
@@ -56,7 +59,7 @@ const login = async (req: Request, res: Response) => {
         }
         const token = jwt.sign({ userId: user.id }, environment.jwtSecret, { expiresIn: '3h' });
     
-        console.log(token);
+        //console.log(token);
         res.json({ token });
     } catch (error) {
         console.error('Error:', error);

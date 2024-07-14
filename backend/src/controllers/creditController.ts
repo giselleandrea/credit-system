@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { Credit } from '../entities/Credit';
 import { CreditUser } from '../entities/CreditUser';
+import { evaluateCreditStatus } from '../services/creditService';
 
-const createCredit = async (req: Request, res: Response) => {
+const creditAssessment = async (req: Request, res: Response) => {
     try {
         const {
             name,
@@ -13,13 +14,19 @@ const createCredit = async (req: Request, res: Response) => {
             userId,
         } = req.body;
 
+        const creditStatus = await evaluateCreditStatus({
+            monthlyIncome,
+            amount,
+            term,
+        }); 
+
         const newCredit = new Credit();
         newCredit.name = name;
         newCredit.amount = amount;
         newCredit.term = term;
         newCredit.interestRate = interestRate;
         newCredit.monthlyIncome = monthlyIncome;
-        newCredit.status = 'revision';
+        newCredit.status = creditStatus;
         await newCredit.save();
 
         const newCreditUser = new CreditUser();
@@ -30,7 +37,7 @@ const createCredit = async (req: Request, res: Response) => {
         console.log("Created successfully");
         res.status(201).json({ 
             success: true,
-            message: 'Credito creado correctamente', 
+            message: 'Crédito creado correctamente', 
             data: newCredit      
         });
         
@@ -40,6 +47,7 @@ const createCredit = async (req: Request, res: Response) => {
     }
 };
 
+
 export default {
-    createCredit
+    creditAssessment
 };
