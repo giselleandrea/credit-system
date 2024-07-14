@@ -47,7 +47,29 @@ const creditAssessment = async (req: Request, res: Response) => {
     }
 };
 
+const getCredits = async (req: Request, res: Response) => {
+    try {
+        const allCredits = await Credit.find();
+
+        if (allCredits.length === 0 ) {
+            return res.status(404).json({
+                success: false,
+                message: 'No se encontraron Creditos en la BD',
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: allCredits,
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
 
 export default {
-    creditAssessment
+    creditAssessment,
+    getCredits
 };

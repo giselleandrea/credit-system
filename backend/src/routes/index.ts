@@ -10,7 +10,9 @@ router.get('/test', (req, res)  => {
 export default router;
 
 import authRoutes from './auth.routes';
+import creditRoutes from './credit.routes';
 
 export {
-    authRoutes
+    authRoutes,
+    creditRoutes
 }

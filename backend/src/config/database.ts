@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { Credit } from "../entities/Credit";
 import { User } from "../entities/User";
 import { CreditUser } from "../entities/CreditUser";
+import { Plan } from "../entities/Plan";
 
 dotenv.config();
 
@@ -30,5 +31,7 @@ export const mongoDataSource = new DataSource ({
     useUnifiedTopology: true,
     synchronize: true,
     logging: false,
-    entities: [],
+    entities: [
+        
+    ],
 });

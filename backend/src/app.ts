@@ -10,7 +10,8 @@ import { environment } from "./config/environment";
 import { Client } from 'pg';
 import { MongoClient } from 'mongodb';
 import routes, {
-    authRoutes
+    authRoutes,
+    creditRoutes
 } from './routes/index';
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use(routes);
 app.use(authRoutes);
+app.use(creditRoutes);
 
 const createPostgresDatabase = async () => {
     const client = new Client({
