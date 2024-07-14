@@ -32,6 +32,6 @@ export const mongoDataSource = new DataSource ({
     synchronize: true,
     logging: false,
     entities: [
-        
+        Plan
     ],
 });

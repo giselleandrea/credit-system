@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { Credit } from '../entities/Credit';
 import { CreditUser } from '../entities/CreditUser';
-import { evaluateCreditStatus } from '../services/creditService';
+import { evaluateCreditStatus, 
+    saveAmortizationPlan 
+} from '../services/creditService';
 
 const creditAssessment = async (req: Request, res: Response) => {
     try {
@@ -34,6 +36,10 @@ const creditAssessment = async (req: Request, res: Response) => {
         newCreditUser.user = userId;
         await newCreditUser.save();
 
+        if (creditStatus === 'Approved') {
+            await saveAmortizationPlan(newCredit);
+        }
+
         console.log("Created successfully");
         res.status(201).json({ 
             success: true,
@@ -49,7 +55,9 @@ const creditAssessment = async (req: Request, res: Response) => {
 
 const getCredits = async (req: Request, res: Response) => {
     try {
-        const allCredits = await Credit.find();
+        const allCredits = await CreditUser.find({
+            relations: ['user', 'credit']
+        });
 
         if (allCredits.length === 0 ) {
             return res.status(404).json({

@@ -1,35 +1,23 @@
+import { ObjectId } from 'mongodb';
 import { 
-    BaseEntity,
-    Column,
-    CreateDateColumn,
     Entity, 
-    PrimaryGeneratedColumn, 
-    UpdateDateColumn
+    ObjectIdColumn, 
+    Column
 } from "typeorm";
 
 @Entity()
-export class Plan extends BaseEntity {
-    @PrimaryGeneratedColumn()
+export class Plan {
+    @ObjectIdColumn()
     id: number;
 
     @Column()
     creditId: number;
 
     @Column()
-    month: number;
-
-    @Column('decimal')
-    principal: number;
-
-    @Column('decimal')
-    interest: number;
-
-    @Column('decimal')
-    remainingBalance: number;
-
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updated_at: Date;
+    paymentSchedule: Array<{
+        month: number;
+        principal: number;
+        interest: number;
+        remainingBalance: number;
+    }>;
 }
