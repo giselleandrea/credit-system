@@ -30,6 +30,9 @@ export class User extends BaseEntity {
     @Column()
     typeDocumet: string;
 
+    @Column()
+    typeUser: string
+
     @OneToMany(() => CreditUser, (creditUser) => creditUser.user)
     creditUsers: CreditUser[];
 

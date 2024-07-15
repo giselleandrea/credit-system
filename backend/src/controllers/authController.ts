@@ -12,6 +12,7 @@ const createUser = async (req: Request, res: Response) => {
             password, 
             document,
             typeDocumet,
+            typeUser,
         } = req.body;
 
         const existingUser = await User.findOne({ 
@@ -29,6 +30,7 @@ const createUser = async (req: Request, res: Response) => {
         newUser.document = document;
         newUser.email = email;
         newUser.typeDocumet = typeDocumet;
+        newUser.typeUser = typeUser;
         await newUser.save();
     
         res.status(201).json({ message: 'Usuario creado correctamente' });

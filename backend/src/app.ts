@@ -11,18 +11,28 @@ import { Client } from 'pg';
 import { MongoClient } from 'mongodb';
 import routes, {
     authRoutes,
-    creditRoutes
+    creditRoutes,
+    dashboardRoutes
 } from './routes/index';
+import path from "path";
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(express.json()); 
 app.use(morgan("dev"));
 app.use(cors());
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(routes);
 app.use(authRoutes);
 app.use(creditRoutes);
+app.use(dashboardRoutes);
 
 const createPostgresDatabase = async () => {
     const client = new Client({

@@ -10,11 +10,12 @@ const creditAssessment = async (req: Request, res: Response) => {
         const {
             name,
             amount,
-            term,
-            interestRate,
+            term,            
             monthlyIncome,
-            userId,
         } = req.body;
+
+        const userId = (req as any).userId;
+        const interestRate = 2;
 
         const creditStatus = await evaluateCreditStatus({
             monthlyIncome,
@@ -66,10 +67,105 @@ const getCredits = async (req: Request, res: Response) => {
             });
         }
 
+        const data = allCredits.map((credit) => ({
+            usuario: {
+                id: credit.user.id,
+                name: credit.user.name,
+                email: credit.user.email,
+                document: credit.user.document,
+                typeDocument: credit.user.typeDocumet,
+            },
+            credito: {
+                id: credit.credit.id,
+                name: credit.credit.name,
+                amount: credit.credit.amount,
+                term: credit.credit.term,
+                interestRate: credit.credit.interestRate,
+                monthlyIncome: credit.credit.monthlyIncome,
+                status: credit.credit.status,
+                created_at: credit.credit.created_at,
+            }
+        }));
+
         res.status(200).json({
             success: true,
-            data: allCredits,
+            data: data,
         });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+const getCreditUser = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+
+        const allCredits = await CreditUser.find({
+            where: { user: { id: userId } },
+            relations: ['user', 'credit']
+        });
+
+        if (allCredits.length === 0 ) {
+            return res.status(404).json({
+                success: false,
+                message: 'No se encontraron Creditos en la BD',
+            });
+        }
+
+        const data = allCredits.map((credit) => ({
+            usuario: {
+                id: credit.user.id,
+                name: credit.user.name,
+                email: credit.user.email,
+                document: credit.user.document,
+                typeDocument: credit.user.typeDocumet,
+            },
+            credito: {
+                id: credit.credit.id,
+                name: credit.credit.name,
+                amount: credit.credit.amount,
+                term: credit.credit.term,
+                interestRate: credit.credit.interestRate,
+                monthlyIncome: credit.credit.monthlyIncome,
+                status: credit.credit.status,
+                created_at: credit.credit.created_at,
+            }
+        }));
+
+        res.status(200).json({
+            success: true,
+            data: data,
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+const cancelCredit = async (req: Request, res: Response) => {
+    try {
+        const credit_id = parseInt(req.params.credit_id);
+
+        const credit = await Credit.findOne({
+            where: {id: credit_id},
+        });
+        if (!credit) {
+            return res.status(404).json({
+                success: false,
+                message: 'Crédito no encontrado',
+            });
+        }
+
+        credit.status = 'cancelled';
+        await credit.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Estado del crédito actualizado a cancelado',
+            data: credit,
+        });
+        
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
@@ -79,5 +175,7 @@ const getCredits = async (req: Request, res: Response) => {
 
 export default {
     creditAssessment,
-    getCredits
+    getCredits,
+    cancelCredit,
+    getCreditUser
 };
