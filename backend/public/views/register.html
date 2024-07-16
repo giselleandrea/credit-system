@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+        <div class="login-form">
+            <h1>Registro</h1>
+            <form id="userForm">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required>
+                <br>
+                <label for="email_reg">Email:</label>
+                <input type="email" id="email_reg" name="email" required>
+                <br>
+                <label for="password_reg">Contraseña:</label>
+                <input type="password" id="password_reg" name="password" required>
+                <br>
+                <label for="typeDocumet">Tipo de documento:</label>
+                <input type="text" id="typeDocumet" name="typeDocumet" required>
+                <br>
+                <label for="document">Documento:</label>
+                <input type="text" id="document" name="document" required>
+                <br>
+                <input type="hidden" id="typeUser" name="typeUser" value="user">
+                <button type="submit" class="btn" >Registrarse</button>
+            </form>
+        </div>    
+
+    <script src="../javascript/register.js"></script>
+</body>
+</html>

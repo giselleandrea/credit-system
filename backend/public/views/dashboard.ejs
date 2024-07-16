@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Importar los scripts necesarios de Power BI -->
+    <script src="https://cdn.powerbi.com/powerbi.js"></script>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    
+    <div id="totalCreditsByStatus"></div>
+    
+    <div id="averageAmountsByTerm"></div>
+
+    <script>
+        // Configurar los detalles del reporte o dashboard de Power BI con la configuración proporcionada desde el controlador
+        var totalCreditsConfig = {
+            type: 'report',
+            id: '<%= powerBiConfig.reportId %>',
+            embedUrl: 'https://app.powerbi.com/reportEmbed?reportId=<%= powerBiConfig.reportId %>&groupId=<%= powerBiConfig.workspaceId %>',
+            tokenType: powerbi.models.TokenType.Aad,
+            accessToken: '<%= powerBiConfig.accessToken %>'
+        };
+
+        var averageAmountsConfig = {
+            type: 'report',
+            id: '<%= powerBiConfig.reportId %>',
+            embedUrl: 'https://app.powerbi.com/reportEmbed?reportId=<%= powerBiConfig.reportId %>&groupId=<%= powerBiConfig.workspaceId %>',
+            tokenType: powerbi.models.TokenType.Aad,
+            accessToken: '<%= powerBiConfig.accessToken %>'
+        };
+
+        // Función para cargar los gráficos de Power BI
+        function embedDashboard() {
+            // Embeber los reportes en los divs correspondientes
+            var totalCreditsReport = powerbi.embed(document.getElementById('totalCreditsByStatus'), totalCreditsConfig);
+            var averageAmountsReport = powerbi.embed(document.getElementById('averageAmountsByTerm'), averageAmountsConfig);
+        }
+
+        // Llamar a la función para embeber los reportes al cargar la página
+        embedDashboard();
+    </script>
+</body>
+</html>
